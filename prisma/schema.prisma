@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id          Int       @id @default(autoincrement())
+  title       String    @unique
+  imageUrl    String
+  iconUrl     String
+  description String
+  comment     Comment[]
+
+  @@map("games")
+}
+
+model Comment {
+  id       Int      @id @default(autoincrement())
+  gameId   Int
+  game     Game     @relation(fields: [gameId], references: [id])
+  userName String
+  imageUrl String
+  comment  String
+  createAt DateTime @default(now())
+
+  @@map("comments")
+}
+
+model Indication {
+  id         Int    @id @default(autoincrement())
+  indication String
+
+  @@map("indications")
+}
